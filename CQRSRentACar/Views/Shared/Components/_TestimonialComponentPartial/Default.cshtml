@@ -1,0 +1,47 @@
+﻿@model List<CQRSRentACar.CQRSPattern.Results.TestimonialResults.GetTestimonialQueryResult>
+        <div class="container-fluid testimonial pb-5">
+            <div class="container pb-5">
+                <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+                    <h1 class="display-5 text-capitalize mb-3">Müşteri<span class="text-primary"> Yorumları</span></h1>
+                    <p class="mb-0">Hizmetlerimizden faydalanan müşterilerimizin deneyimlerini ve geri bildirimlerini önemsiyoruz.Onların memnuniyeti, sunduğumuz kaliteyi ve güveni en iyi şekilde yansıtmaktadır. Siz de yolculuğunuz öncesinde gerçek kullanıcı deneyimlerini inceleyerek bize güvenebilirsiniz.
+                    </p>
+                </div>
+                <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
+                    @foreach (var item in Model)
+                    {
+                        <div class="testimonial-item">
+                            <div class="testimonial-quote"><i class="fa fa-quote-right fa-2x"></i>
+                            </div>
+                            <div class="testimonial-inner p-4">
+                                @if (!string.IsNullOrEmpty(item.TestimonialImageUrl))
+                                {
+                                    <img src="@item.TestimonialImageUrl" class="img-fluid" alt="@item.TestimonialNameSurname" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
+                                }
+                                else
+                                {
+                                    <div class="bg-primary d-flex align-items-center justify-content-center text-white fw-bold" style="width: 80px; height: 80px; border-radius: 50%;">
+                                        @item.TestimonialNameSurname.Substring(0, 1).ToUpper()
+                                    </div>
+                                }
+                                <div class="ms-4">
+                                    <h4>@item.TestimonialNameSurname</h4>
+                                    <p>@item.TestimonialPosition</p>
+                                    <div class="d-flex text-primary">
+                                        @{
+                                            int rating = int.TryParse(item.TestimonialRating, out int r) ? r : 5;
+                                        }
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fas fa-star @(i <= rating ? "" : "text-body")"></i>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border-top rounded-bottom p-4">
+                                <p class="mb-0">@item.TestimonialComment</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>

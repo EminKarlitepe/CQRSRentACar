@@ -1,0 +1,61 @@
+@model IEnumerable<CQRSRentACar.CQRSPattern.Results.EmployeeResults.GetEmployeeQueryResult>
+@{
+    ViewData["Title"] = "Çalışan Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Çalışan Yönetimi</h3>
+                    <div class="card-tools">
+                        <a asp-action="CreateEmployee" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Yeni Ekle
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Resim</th>
+                                <th>Ad Soyad</th>
+                                <th>Pozisyon</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.EmployeeId</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.EmployeeImageUrl))
+                                        {
+                                            <img src="@item.EmployeeImageUrl" alt="Çalışan Resmi" style="width: 50px; height: 50px; object-fit: cover;" class="rounded" />
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Resim Yok</span>
+                                        }
+                                    </td>
+                                    <td>@item.EmployeeNameSurname</td>
+                                    <td>@item.EmployeePosition</td>
+                                    <td>
+                                        <a asp-action="UpdateEmployee" asp-route-id="@item.EmployeeId" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Düzenle
+                                        </a>
+                                        <a asp-action="DeleteEmployee" asp-route-id="@item.EmployeeId" class="btn btn-danger btn-sm" onclick="return confirm('Bu çalışanı silmek istediğinizden emin misiniz?')">
+                                            <i class="fas fa-trash"></i> Sil
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+</div>

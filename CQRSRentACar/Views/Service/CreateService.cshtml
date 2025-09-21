@@ -1,0 +1,48 @@
+@model CQRSRentACar.CQRSPattern.Commands.ServiceCommands.CreateServiceCommand
+@{
+    ViewData["Title"] = "Yeni Hizmet Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Yeni Hizmet Ekle</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateService">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group">
+                            <label asp-for="ServiceTitle" class="control-label">Başlık</label>
+                            <input asp-for="ServiceTitle" class="form-control" />
+                            <span asp-validation-for="ServiceTitle" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="ServiceDescription" class="control-label">Açıklama</label>
+                            <textarea asp-for="ServiceDescription" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="ServiceDescription" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="ServiceIcon" class="control-label">İkon (Font Awesome)</label>
+                            <input asp-for="ServiceIcon" class="form-control" placeholder="fa fa-phone-alt" />
+                            <small class="form-text text-muted">Örnek: fa fa-phone-alt, fa fa-money-bill-alt, fa fa-road</small>
+                            <span asp-validation-for="ServiceIcon" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="submit" value="Kaydet" class="btn btn-primary" />
+                            <a asp-action="ServiceList" class="btn btn-secondary">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

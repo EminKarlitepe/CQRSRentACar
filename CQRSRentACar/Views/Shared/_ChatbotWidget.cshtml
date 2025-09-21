@@ -1,0 +1,768 @@
+<div id="chatbot-widget" class="chatbot-widget">
+    <div id="chatbot-toggle" class="chatbot-toggle">
+        <i class="fas fa-comments"></i>
+        <span class="chatbot-badge" id="chatbot-badge">0</span>
+    </div>
+    
+    <div id="chatbot-panel" class="chatbot-panel">
+        <div class="chatbot-header">
+            <div class="chatbot-title">
+                <i class="fas fa-comments"></i>
+                <span>Akıllı Asistan</span>
+            </div>
+            <div class="chatbot-controls">
+                <button id="chatbot-minimize" class="chatbot-btn">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button id="chatbot-close" class="chatbot-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="chatbot-body">
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="chatbot-message bot-message">
+                    <div class="message-content">
+                        <div class="message-text">
+                            Merhaba! Size nasıl yardımcı olabilirim? 
+                            <br><br>
+                            <strong>Hızlı Seçenekler:</strong>
+                            <br>• Araç önerisi
+                            <br>• Acil destek
+                            <br>• Fiyat bilgisi
+                            <br>• Rezervasyon
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input-container">
+                <div class="chatbot-input-group">
+                    <input type="text" 
+                           id="chatbot-message-input" 
+                           class="chatbot-input" 
+                           placeholder="Mesajınızı yazın..." 
+                           maxlength="500">
+                    <button id="chatbot-send-btn" class="chatbot-send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <div class="chatbot-quick-actions">
+                    <button class="chatbot-quick-btn" data-message="Ekonomik araç önerisi istiyorum">
+                        <i class="fas fa-car"></i> Araç Önerisi
+                    </button>
+                    <button class="chatbot-quick-btn" data-message="Acil yardım istiyorum">
+                        <i class="fas fa-exclamation-triangle"></i> Acil Destek
+                    </button>
+                    <button class="chatbot-quick-btn" data-message="Fiyatlarınız nedir?">
+                        <i class="fas fa-tags"></i> Fiyat Bilgisi
+                    </button>
+                    <button class="chatbot-quick-btn" data-message="Rezervasyon nasıl yapılır?">
+                        <i class="fas fa-calendar-plus"></i> Rezervasyon
+                    </button>
+                </div>
+                
+                <div class="chatbot-status">
+                    <div class="status-indicator status-online" id="chatbot-status-indicator"></div>
+                    <span id="chatbot-status-text">Çevrimiçi</span>
+                    <span class="chatbot-response-time" id="chatbot-response-time"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.chatbot-toggle {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.chatbot-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(0, 123, 255, 0.4);
+}
+
+.chatbot-toggle i {
+    color: white;
+    font-size: 24px;
+}
+
+.chatbot-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    display: none;
+}
+
+.chatbot-badge.show {
+    display: flex;
+}
+
+.chatbot-panel {
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+}
+
+.chatbot-panel.show {
+    display: flex;
+}
+
+.chatbot-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-title {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.chatbot-title i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.chatbot-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.chatbot-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.chatbot-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.chatbot-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chatbot-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f8f9fa;
+    max-height: 350px;
+}
+
+.chatbot-message {
+    margin-bottom: 15px;
+    display: flex;
+    animation: slideIn 0.3s ease-out;
+}
+
+.chatbot-message.user-message {
+    justify-content: flex-end;
+}
+
+.chatbot-message.bot-message {
+    justify-content: flex-start;
+}
+
+.chatbot-message .message-content {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 18px;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+.user-message .message-content {
+    background: #007bff;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-message .message-content {
+    background: white;
+    color: #333;
+    border: 1px solid #e9ecef;
+    border-bottom-left-radius: 4px;
+}
+
+.chatbot-input-container {
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #e9ecef;
+}
+
+.chatbot-input-group {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.chatbot-input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 10px 15px;
+    outline: none;
+    font-size: 14px;
+}
+
+.chatbot-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.chatbot-send-btn {
+    background: #007bff;
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.chatbot-send-btn:hover {
+    background: #0056b3;
+}
+
+.chatbot-send-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.chatbot-quick-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chatbot-quick-btn {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.chatbot-quick-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.chatbot-typing {
+    display: none;
+    padding: 10px 15px;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    max-width: 80%;
+    margin-bottom: 15px;
+}
+
+.chatbot-typing.show {
+    display: block;
+}
+
+.chatbot-typing-dots {
+    display: inline-block;
+}
+
+.chatbot-typing-dots::after {
+    content: '...';
+    animation: typing 1.5s infinite;
+}
+
+@@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@@keyframes typing {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+.chatbot-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 4px 8px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    font-size: 11px;
+    color: #6c757d;
+}
+
+.status-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-online {
+    background-color: #28a745;
+    animation: pulse 2s infinite;
+}
+
+.status-offline {
+    background-color: #dc3545;
+}
+
+.status-busy {
+    background-color: #ffc107;
+}
+
+.chatbot-response-time {
+    margin-left: auto;
+    font-size: 10px;
+    color: #adb5bd;
+}
+
+.chatbot-message.car-recommendation .message-content {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-left: 4px solid #2196f3;
+}
+
+.chatbot-message.real-time-support .message-content {
+    background: linear-gradient(135deg, #fff3e0, #ffcc02);
+    border-left: 4px solid #ff9800;
+}
+
+.chatbot-message.error .message-content {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    border-left: 4px solid #f44336;
+}
+
+.chatbot-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    z-index: 10000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+}
+
+.chatbot-notification.show {
+    transform: translateX(0);
+}
+
+.chatbot-notification.success {
+    background: #28a745;
+}
+
+.chatbot-notification.error {
+    background: #dc3545;
+}
+
+.chatbot-notification.warning {
+    background: #ffc107;
+    color: #212529;
+}
+
+@@media (max-width: 768px) {
+    .chatbot-panel {
+        width: 300px;
+        height: 450px;
+    }
+    
+    .chatbot-widget {
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    .chatbot-toggle {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .chatbot-toggle i {
+        font-size: 20px;
+    }
+}
+
+@@media (max-width: 480px) {
+    .chatbot-panel {
+        width: calc(100vw - 30px);
+        left: -15px;
+        bottom: 70px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatbotWidget = document.getElementById('chatbot-widget');
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const chatbotPanel = document.getElementById('chatbot-panel');
+    const chatbotMinimize = document.getElementById('chatbot-minimize');
+    const chatbotClose = document.getElementById('chatbot-close');
+    const chatbotMessages = document.getElementById('chatbot-messages');
+    const chatbotMessageInput = document.getElementById('chatbot-message-input');
+    const chatbotSendBtn = document.getElementById('chatbot-send-btn');
+    const chatbotBadge = document.getElementById('chatbot-badge');
+    const chatbotQuickBtns = document.querySelectorAll('.chatbot-quick-btn');
+
+    let isOpen = false;
+    let isTyping = false;
+    let unreadCount = 0;
+    let responseStartTime = 0;
+    let connectionStatus = 'online';
+    let messageQueue = [];
+    let isProcessingQueue = false;
+
+    chatbotToggle.addEventListener('click', function() {
+        if (isOpen) {
+            closeChatbot();
+        } else {
+            openChatbot();
+        }
+    });
+
+    chatbotMinimize.addEventListener('click', function() {
+        closeChatbot();
+    });
+
+    chatbotClose.addEventListener('click', function() {
+        closeChatbot();
+    });
+
+    function openChatbot() {
+        chatbotPanel.classList.add('show');
+        isOpen = true;
+        unreadCount = 0;
+        updateBadge();
+        chatbotMessageInput.focus();
+    }
+
+    function closeChatbot() {
+        chatbotPanel.classList.remove('show');
+        isOpen = false;
+    }
+
+    async function sendMessage(message) {
+        if (!message.trim() || isTyping) return;
+
+        if (connectionStatus === 'offline') {
+            messageQueue.push(message);
+            showNotification('Mesajınız çevrimiçi olduğunda gönderilecek.', 'warning');
+            return;
+        }
+
+        addMessage(message, 'user');
+        
+        chatbotMessageInput.value = '';
+        
+        showTypingIndicator();
+        
+        setInputState(false);
+        
+        responseStartTime = Date.now();
+
+        try {
+            const response = await fetch('/Chatbot/SendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    userEmail: ''
+                })
+            });
+
+            const data = await response.json();
+            
+            const responseTime = Date.now() - responseStartTime;
+            updateResponseTime(responseTime);
+            
+            hideTypingIndicator();
+            
+            if (data.success) {
+                addMessage(data.response, 'bot', data.messageType);
+                
+                if (data.messageType === 'RealTimeSupport') {
+                    showNotification('Acil destek talebiniz alındı. En kısa sürede yanıtlanacak.', 'success');
+                } else if (data.messageType === 'CarRecommendation') {
+                    showNotification('Araç önerileriniz hazırlandı.', 'success');
+                }
+            } else {
+                addMessage('Üzgünüm, bir hata oluştu. Lütfen tekrar deneyin.', 'bot', 'error');
+                showNotification('Mesaj gönderilemedi. Lütfen tekrar deneyin.', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            hideTypingIndicator();
+            addMessage('Bağlantı hatası. Lütfen internet bağlantınızı kontrol edin.', 'bot', 'error');
+            showNotification('Bağlantı hatası. Mesajınız kuyruğa eklendi.', 'error');
+            
+            messageQueue.push(message);
+        } finally {
+            setInputState(true);
+        }
+    }
+
+    function addMessage(message, sender, messageType = '') {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chatbot-message ${sender}-message`;
+        
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('tr-TR', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <div class="message-text">${formatMessage(message)}</div>
+            </div>
+        `;
+
+        chatbotMessages.appendChild(messageDiv);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+        if (!isOpen && sender === 'bot') {
+            unreadCount++;
+            updateBadge();
+        }
+    }
+
+    function formatMessage(message) {
+        return message.replace(/\n/g, '<br>');
+    }
+
+    function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'chatbot-message bot-message chatbot-typing show';
+        typingDiv.innerHTML = `
+            <div class="message-content">
+                <div class="message-text">
+                    <span class="chatbot-typing-dots">Yazıyor</span>
+                </div>
+            </div>
+        `;
+        
+        chatbotMessages.appendChild(typingDiv);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        isTyping = true;
+    }
+
+    function hideTypingIndicator() {
+        const typingIndicator = document.querySelector('.chatbot-typing');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+        isTyping = false;
+    }
+
+    function setInputState(enabled) {
+        chatbotMessageInput.disabled = !enabled;
+        chatbotSendBtn.disabled = !enabled;
+        
+        if (enabled) {
+            chatbotMessageInput.focus();
+        }
+    }
+
+    function updateBadge() {
+        if (unreadCount > 0) {
+            chatbotBadge.textContent = unreadCount;
+            chatbotBadge.classList.add('show');
+        } else {
+            chatbotBadge.classList.remove('show');
+        }
+    }
+
+    function updateResponseTime(responseTime) {
+        const responseTimeElement = document.getElementById('chatbot-response-time');
+        if (responseTimeElement) {
+            responseTimeElement.textContent = `${responseTime}ms`;
+            setTimeout(() => {
+                responseTimeElement.textContent = '';
+            }, 3000);
+        }
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `chatbot-notification ${type}`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 4000);
+    }
+
+    function updateConnectionStatus(status) {
+        connectionStatus = status;
+        const statusIndicator = document.getElementById('chatbot-status-indicator');
+        const statusText = document.getElementById('chatbot-status-text');
+        
+        if (statusIndicator && statusText) {
+            statusIndicator.className = `status-indicator status-${status}`;
+            statusText.textContent = status === 'online' ? 'Çevrimiçi' : 
+                                   status === 'offline' ? 'Çevrimdışı' : 'Meşgul';
+        }
+        
+        if (status === 'online' && messageQueue.length > 0) {
+            processMessageQueue();
+        }
+    }
+
+    async function processMessageQueue() {
+        if (isProcessingQueue || messageQueue.length === 0) return;
+        
+        isProcessingQueue = true;
+        showNotification(`${messageQueue.length} bekleyen mesaj gönderiliyor...`, 'info');
+        
+        while (messageQueue.length > 0) {
+            const message = messageQueue.shift();
+            await sendMessage(message);
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second between messages
+        }
+        
+        isProcessingQueue = false;
+        showNotification('Tüm bekleyen mesajlar gönderildi.', 'success');
+    }
+
+    function checkConnectionStatus() {
+        const isOnline = navigator.onLine;
+        updateConnectionStatus(isOnline ? 'online' : 'offline');
+    }
+
+    chatbotSendBtn.addEventListener('click', function() {
+        const message = chatbotMessageInput.value.trim();
+        if (message) {
+            sendMessage(message);
+        }
+    });
+
+    chatbotMessageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            const message = chatbotMessageInput.value.trim();
+            if (message) {
+                sendMessage(message);
+            }
+        }
+    });
+
+    chatbotQuickBtns.forEach(button => {
+        button.addEventListener('click', function() {
+            const message = this.getAttribute('data-message');
+            sendMessage(message);
+        });
+    });
+
+    checkConnectionStatus();
+    
+    window.addEventListener('online', () => {
+        updateConnectionStatus('online');
+        showNotification('Bağlantı yeniden kuruldu.', 'success');
+    });
+    
+    window.addEventListener('offline', () => {
+        updateConnectionStatus('offline');
+        showNotification('Bağlantı kesildi. Mesajlarınız kuyruğa eklenecek.', 'warning');
+    });
+    
+    setInterval(checkConnectionStatus, 30000);
+    
+    setTimeout(() => {
+        if (!localStorage.getItem('chatbotWelcomeShown')) {
+            showNotification('Merhaba! Size nasıl yardımcı olabilirim?', 'info');
+            localStorage.setItem('chatbotWelcomeShown', 'true');
+        }
+    }, 2000);
+});
+</script>

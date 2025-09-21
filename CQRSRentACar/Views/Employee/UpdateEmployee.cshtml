@@ -1,0 +1,48 @@
+@model CQRSRentACar.CQRSPattern.Commands.EmployeeCommands.UpdateEmployeeCommand
+@{
+    ViewData["Title"] = "Çalışan Düzenle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Çalışan Düzenle</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateEmployee">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="EmployeeId" />
+                        
+                        <div class="form-group">
+                            <label asp-for="EmployeeNameSurname" class="control-label">Ad Soyad</label>
+                            <input asp-for="EmployeeNameSurname" class="form-control" />
+                            <span asp-validation-for="EmployeeNameSurname" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="EmployeePosition" class="control-label">Pozisyon</label>
+                            <input asp-for="EmployeePosition" class="form-control" />
+                            <span asp-validation-for="EmployeePosition" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="EmployeeImageUrl" class="control-label">Resim URL</label>
+                            <input asp-for="EmployeeImageUrl" class="form-control" />
+                            <span asp-validation-for="EmployeeImageUrl" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="submit" value="Güncelle" class="btn btn-primary" />
+                            <a asp-action="EmployeeList" class="btn btn-secondary">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,61 @@
+@model IEnumerable<CQRSRentACar.CQRSPattern.Results.SliderResults.GetSliderQueryResult>
+@{
+    ViewData["Title"] = "Slider Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Slider Yönetimi</h3>
+                    <div class="card-tools">
+                        <a asp-action="CreateSlider" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Yeni Ekle
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Resim</th>
+                                <th>Başlık</th>
+                                <th>Alt Başlık</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.SliderId</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.SliderImageUrl))
+                                        {
+                                            <img src="@item.SliderImageUrl" alt="Slider Resmi" style="width: 100px; height: 60px; object-fit: cover;" class="rounded" />
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Resim Yok</span>
+                                        }
+                                    </td>
+                                    <td>@item.SliderTitle</td>
+                                    <td>@(item.SliderSubTitle?.Length > 30 ? item.SliderSubTitle.Substring(0, 30) + "..." : item.SliderSubTitle)</td>
+                                    <td>
+                                        <a asp-action="UpdateSlider" asp-route-id="@item.SliderId" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Düzenle
+                                        </a>
+                                        <a asp-action="DeleteSlider" asp-route-id="@item.SliderId" class="btn btn-danger btn-sm" onclick="return confirm('Bu slider\'ı silmek istediğinizden emin misiniz?')">
+                                            <i class="fas fa-trash"></i> Sil
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+</div>

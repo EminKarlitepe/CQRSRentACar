@@ -1,0 +1,139 @@
+@model List<CQRSRentACar.Entities.CarRental>
+@{
+    ViewData["Title"] = "Kiralanan Araçlar";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-car"></i> Kiralanan Araçlar
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Araç</th>
+                                        <th>Alış Lokasyonu</th>
+                                        <th>Teslim Lokasyonu</th>
+                                        <th>Alış Tarihi</th>
+                                        <th>Teslim Tarihi</th>
+                                        <th>Süre (Gün)</th>
+                                        <th>Durum</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var rental in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    @if (!string.IsNullOrEmpty(rental.Car?.CarImageUrl))
+                                                    {
+                                                        <img src="@rental.Car.CarImageUrl" alt="@rental.Car.CarName" 
+                                                             class="img-thumbnail me-2" style="width: 50px; height: 50px;">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="bg-light d-flex align-items-center justify-content-center me-2" 
+                                                             style="width: 50px; height: 50px;">
+                                                            <i class="fas fa-car text-muted"></i>
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        <strong>@rental.Car?.CarName</strong><br>
+                                                        <small class="text-muted">@rental.Car?.CarType</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(rental.PickUpLocation))
+                                                {
+                                                    <span class="badge bg-primary">@rental.PickUpLocation</span>
+                                                }
+                                                else if (rental.PickUpAirport != null)
+                                                {
+                                                    <span class="badge bg-info">@rental.PickUpAirport.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(rental.DropOffLocation))
+                                                {
+                                                    <span class="badge bg-primary">@rental.DropOffLocation</span>
+                                                }
+                                                else if (rental.DropOffAirport != null)
+                                                {
+                                                    <span class="badge bg-info">@rental.DropOffAirport.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success">@rental.PickUpDate.ToString("dd.MM.yyyy")</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-warning">@rental.DropOffDate.ToString("dd.MM.yyyy")</span>
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var days = (rental.DropOffDate - rental.PickUpDate).Days;
+                                                }
+                                                <span class="badge bg-secondary">@days gün</span>
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var now = DateTime.Now;
+                                                    var status = "";
+                                                    var badgeClass = "";
+                                                    
+                                                    if (now < rental.PickUpDate)
+                                                    {
+                                                        status = "Beklemede";
+                                                        badgeClass = "bg-info";
+                                                    }
+                                                    else if (now >= rental.PickUpDate && now <= rental.DropOffDate)
+                                                    {
+                                                        status = "Aktif";
+                                                        badgeClass = "bg-success";
+                                                    }
+                                                    else
+                                                    {
+                                                        status = "Tamamlandı";
+                                                        badgeClass = "bg-secondary";
+                                                    }
+                                                }
+                                                <span class="badge @badgeClass">@status</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info text-center">
+                            <i class="fas fa-info-circle fa-2x mb-3"></i>
+                            <h4>Henüz kiralanan araç bulunmuyor</h4>
+                            <p>Müşteriler araç kiraladığında burada görünecek.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,272 @@
+@model IEnumerable<CQRSRentACar.CQRSPattern.Results.CarResults.GetCarQueryResult>
+@{
+    ViewData["Title"] = "Araç Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    
+    var allCars = Model.ToList();
+    var queryParams = Context.Request.Query;
+    
+    var filteredCars = allCars.AsQueryable();
+    
+    if (!string.IsNullOrEmpty(queryParams["minPrice"]) && int.TryParse(queryParams["minPrice"], out int minPrice))
+    {
+        filteredCars = filteredCars.Where(c => c.Price >= minPrice);
+    }
+    
+    if (!string.IsNullOrEmpty(queryParams["maxPrice"]) && int.TryParse(queryParams["maxPrice"], out int maxPrice))
+    {
+        filteredCars = filteredCars.Where(c => c.Price <= maxPrice);
+    }
+    
+    if (!string.IsNullOrEmpty(queryParams["minYear"]) && int.TryParse(queryParams["minYear"], out int minYear))
+    {
+        filteredCars = filteredCars.Where(c => c.ModelYear >= minYear);
+    }
+    
+    if (!string.IsNullOrEmpty(queryParams["maxYear"]) && int.TryParse(queryParams["maxYear"], out int maxYear))
+    {
+        filteredCars = filteredCars.Where(c => c.ModelYear <= maxYear);
+    }
+    
+    if (!string.IsNullOrEmpty(queryParams["minRating"]) && int.TryParse(queryParams["minRating"], out int minRating))
+    {
+        filteredCars = filteredCars.Where(c => c.Rating >= minRating);
+    }
+    
+    if (!string.IsNullOrEmpty(queryParams["maxRating"]) && int.TryParse(queryParams["maxRating"], out int maxRating))
+    {
+        filteredCars = filteredCars.Where(c => c.Rating <= maxRating);
+    }
+    
+    if (!string.IsNullOrEmpty(queryParams["minKm"]) && int.TryParse(queryParams["minKm"], out int minKm))
+    {
+        filteredCars = filteredCars.Where(c => c.Kilometer >= minKm);
+    }
+    
+    if (!string.IsNullOrEmpty(queryParams["maxKm"]) && int.TryParse(queryParams["maxKm"], out int maxKm))
+    {
+        filteredCars = filteredCars.Where(c => c.Kilometer <= maxKm);
+    }
+    
+    var cars = filteredCars.ToList();
+    var totalCars = cars.Count;
+    var carsPerPage = 9;
+    var currentPage = 1;
+    if (queryParams.ContainsKey("page") && int.TryParse(queryParams["page"], out int page))
+    {
+        currentPage = page;
+    }
+    var totalPages = (int)Math.Ceiling((double)totalCars / carsPerPage);
+    var startIndex = (currentPage - 1) * carsPerPage;
+    var endIndex = Math.Min(startIndex + carsPerPage, totalCars);
+    var paginatedCars = cars.Skip(startIndex).Take(carsPerPage);
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">Araç Yönetimi</h3>
+                    <div class="d-flex align-items-center">
+                        <span class="badge badge-info mr-2">@totalCars araç</span>
+                        @if (totalPages > 1)
+                        {
+                            <div class="mr-3">
+                                <nav aria-label="Sayfa navigasyonu">
+                                    <ul class="pagination pagination-sm mb-0">
+                                        @{
+                                            var buildUrl = new Func<int, string>(page => {
+                                                var url = "?page=" + page;
+                                                if (!string.IsNullOrEmpty(queryParams["minPrice"])) url += "&minPrice=" + queryParams["minPrice"];
+                                                if (!string.IsNullOrEmpty(queryParams["maxPrice"])) url += "&maxPrice=" + queryParams["maxPrice"];
+                                                if (!string.IsNullOrEmpty(queryParams["minYear"])) url += "&minYear=" + queryParams["minYear"];
+                                                if (!string.IsNullOrEmpty(queryParams["maxYear"])) url += "&maxYear=" + queryParams["maxYear"];
+                                                if (!string.IsNullOrEmpty(queryParams["minRating"])) url += "&minRating=" + queryParams["minRating"];
+                                                if (!string.IsNullOrEmpty(queryParams["maxRating"])) url += "&maxRating=" + queryParams["maxRating"];
+                                                if (!string.IsNullOrEmpty(queryParams["minKm"])) url += "&minKm=" + queryParams["minKm"];
+                                                if (!string.IsNullOrEmpty(queryParams["maxKm"])) url += "&maxKm=" + queryParams["maxKm"];
+                                                return url;
+                                            });
+                                        }
+                                        
+                                        @if (currentPage > 1)
+                                        {
+                                            <li class="page-item">
+                                                <a class="page-link" href="@buildUrl(currentPage - 1)">«</a>
+                                            </li>
+                                        }
+                                        
+                                        @for (int i = Math.Max(1, currentPage - 2); i <= Math.Min(totalPages, currentPage + 2); i++)
+                                        {
+                                            <li class="page-item @(i == currentPage ? "active" : "")">
+                                                <a class="page-link" href="@buildUrl(i)">@i</a>
+                                            </li>
+                                        }
+                                        
+                                        @if (currentPage < totalPages)
+                                        {
+                                            <li class="page-item">
+                                                <a class="page-link" href="@buildUrl(currentPage + 1)">»</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </nav>
+                            </div>
+                        }
+                        <button type="button" class="btn btn-info btn-sm mr-2" data-toggle="collapse" data-target="#filterCollapse">
+                            <i class="fas fa-filter"></i> Filtrele
+                        </button>
+                        <a asp-action="CreateCar" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Yeni Araç Ekle
+                        </a>
+                    </div>
+                </div>
+                @if (totalPages > 1)
+                {
+                    <div class="mt-2">
+                        <small class="text-muted">Sayfa @currentPage/@totalPages (@totalCars araçtan @(startIndex + 1)-@endIndex arası)</small>
+                    </div>
+                }
+            </div>
+            <div class="collapse" id="filterCollapse">
+                <div class="card-body bg-light">
+                    <form method="get" action="@Url.Action("CarList")">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label">Min Fiyat</label>
+                                <input type="number" name="minPrice" class="form-control" placeholder="0" value="@Context.Request.Query["minPrice"]">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Max Fiyat</label>
+                                <input type="number" name="maxPrice" class="form-control" placeholder="10000" value="@Context.Request.Query["maxPrice"]">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Min Model Yılı</label>
+                                <input type="number" name="minYear" class="form-control" placeholder="2010" value="@Context.Request.Query["minYear"]">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Max Model Yılı</label>
+                                <input type="number" name="maxYear" class="form-control" placeholder="2024" value="@Context.Request.Query["maxYear"]">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Min Puan</label>
+                                <input type="number" name="minRating" class="form-control" placeholder="1" min="1" max="5" value="@Context.Request.Query["minRating"]">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Max Puan</label>
+                                <input type="number" name="maxRating" class="form-control" placeholder="5" min="1" max="5" value="@Context.Request.Query["maxRating"]">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Max Kilometre</label>
+                                <input type="number" name="maxKm" class="form-control" placeholder="100000" value="@Context.Request.Query["maxKm"]">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Min Kilometre</label>
+                                <input type="number" name="minKm" class="form-control" placeholder="0" value="@Context.Request.Query["minKm"]">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Filtrele
+                                </button>
+                                <a href="@Url.Action("CarList")" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> Temizle
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Resim</th>
+                                <th>Araç Adı</th>
+                                <th>Araç Tipi</th>
+                                <th>Günlük Fiyat</th>
+                                <th>Puan</th>
+                                <th>Koltuk</th>
+                                <th>Vites</th>
+                                <th>Yakıt</th>
+                                <th>Model Yılı</th>
+                                <th>Kilometre</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (paginatedCars != null && paginatedCars.Any())
+                            {
+                                @foreach (var car in paginatedCars)
+                                {
+                                    <tr>
+                                        <td>@car.CarId</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(car.CarImageUrl))
+                                            {
+                                                <img src="@car.CarImageUrl" alt="@car.CarName" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;" />
+                                            }
+                                            else
+                                            {
+                                                <div class="bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                                    <i class="fas fa-car text-muted"></i>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td>@car.CarName</td>
+                                        <td>
+                                            <span class="badge badge-info">@car.CarType</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-success font-weight-bold">₺@car.Price.ToString("N0")</span>
+                                        </td>
+                                        <td>
+                                            @for (int i = 0; i < 5; i++)
+                                            {
+                                                <i class="fas fa-star @(i < car.Rating ? "text-warning" : "text-muted")"></i>
+                                            }
+                                        </td>
+                                        <td>@car.Seat</td>
+                                        <td>@car.Transmission</td>
+                                        <td>@car.FuelType</td>
+                                        <td>@car.ModelYear</td>
+                                        <td>@car.Kilometer.ToString("N0") km</td>
+                                        <td>
+                                            <a asp-action="UpdateCar" asp-route-id="@car.CarId" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i> Düzenle
+                                            </a>
+                                            <a asp-action="DeleteCar" asp-route-id="@car.CarId" class="btn btn-danger btn-sm" onclick="return confirm('Bu aracı silmek istediğinizden emin misiniz?')">
+                                                <i class="fas fa-trash"></i> Sil
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="12" class="text-center">
+                                        <div class="py-4">
+                                            <i class="fas fa-car fa-3x text-muted mb-3"></i>
+                                            <h5 class="text-muted">Araç bulunamadı</h5>
+                                            <p class="text-muted">Henüz hiç araç eklenmemiş veya arama kriterlerinize uygun araç bulunamadı.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

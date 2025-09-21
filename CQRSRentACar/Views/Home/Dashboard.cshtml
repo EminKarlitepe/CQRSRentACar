@@ -1,0 +1,106 @@
+@{
+    ViewData["Title"] = "Akaryakıt Fiyatları";
+    Layout = "_AdminLayout";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-gas-pump"></i> Avrupa Gaz Fiyatları
+                </h3>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 200px;">
+                        <input type="text" id="countrySearch" class="form-control float-right" placeholder="Ülke ara...">
+                        <div class="input-group-append">
+                            <button type="button" id="searchBtn" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.FuelPrices?.Result != null)
+                {
+                    <div class="table-responsive">
+                        <table id="fuelTable" class="table table-bordered table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Ülke</th>
+                                    <th>Dizel Fiyatı (€)</th>
+                                    <th>Benzin Fiyatı (€)</th>
+                                    <th>Para Birimi</th>
+                                    <th>LPG Fiyatı (€)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var country in ViewBag.FuelPrices.Result)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@country.Country</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">@country.DieselPrice.ToString("N3")</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">@country.GasolinePrice.ToString("N3")</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">@country.Currency</span>
+                                        </td>
+                                        <td>
+                                            @if (country.LPG != "-" && !string.IsNullOrEmpty(country.LPG))
+                                            {
+                                                <span class="badge bg-warning">@double.Parse(country.LPG.Replace(",", ".")).ToString("N3")</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">-</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        <h4><i class="icon fas fa-exclamation-triangle"></i> Uyarı!</h4>
+                        Gaz fiyatları yüklenemedi. Lütfen daha sonra tekrar deneyin.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            var table = $('#fuelTable').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json"
+                },
+                "columnDefs": [
+                    { "searchable": true, "targets": [0] }
+                ]
+            });
+
+            $('#countrySearch').on('keyup', function() {
+                table.column(0).search(this.value, false, false).draw();
+            });
+            
+            $('#searchBtn').on('click', function() {
+                table.column(0).search($('#countrySearch').val(), false, false).draw();
+            });
+        });
+    </script>
+}

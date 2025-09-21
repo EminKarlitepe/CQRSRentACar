@@ -1,0 +1,61 @@
+@model IEnumerable<CQRSRentACar.CQRSPattern.Results.ServiceResults.GetServiceQueryResult>
+@{
+    ViewData["Title"] = "Hizmet Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Hizmet Yönetimi</h3>
+                    <div class="card-tools">
+                        <a asp-action="CreateService" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Yeni Ekle
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>İkon</th>
+                                <th>Başlık</th>
+                                <th>Açıklama</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.ServiceId</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.ServiceIcon))
+                                        {
+                                            <i class="@item.ServiceIcon fa-2x"></i>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">İkon Yok</span>
+                                        }
+                                    </td>
+                                    <td>@item.ServiceTitle</td>
+                                    <td>@(item.ServiceDescription?.Length > 50 ? item.ServiceDescription.Substring(0, 50) + "..." : item.ServiceDescription)</td>
+                                    <td>
+                                        <a asp-action="UpdateService" asp-route-id="@item.ServiceId" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Düzenle
+                                        </a>
+                                        <a asp-action="DeleteService" asp-route-id="@item.ServiceId" class="btn btn-danger btn-sm" onclick="return confirm('Bu hizmeti silmek istediğinizden emin misiniz?')">
+                                            <i class="fas fa-trash"></i> Sil
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+</div>

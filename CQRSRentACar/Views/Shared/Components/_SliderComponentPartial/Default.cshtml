@@ -1,0 +1,113 @@
+﻿<link rel="stylesheet" href="~/css/slider-search.css" />
+
+@model List<CQRSRentACar.Entities.Slider>
+<div class="header-carousel slider-search">
+    <div id="carouselId" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+        <ol class="carousel-indicators">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <li data-bs-target="#carouselId" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="@(i + 1). slide"></li>
+            }
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <img src="@Model[i].SliderImageUrl" class="img-fluid w-100" alt="@(i + 1). slide"/>
+                    <div class="carousel-caption">
+                        <div class="container py-4">
+                            <div class="row g-5">
+                                <div class="col-lg-6 fadeInLeft animated" data-animation="fadeInLeft" data-delay="1s" style="animation-delay: 1s;">
+                                    <div class="bg-secondary rounded p-5">
+                                        <h4 class="text-white mb-4">@Model[i].SliderTitle</h4>
+                                        <form method="get" asp-controller="Car" asp-action="SearchCars" id="searchForm">
+                                            <div class="row g-3">
+                                                <div class="col-12">
+                                                    <select name="carType" class="form-select" aria-label="Default select example">
+                                                        <option value="">Araç Tipi Seçiniz</option>
+                                                        <option value="Sedan">Sedan</option>
+                                                        <option value="Hatchback">Hatchback</option>
+                                                        <option value="SUV">SUV</option>
+                                                        <option value="Coupe">Coupe</option>
+                                                        <option value="Convertible">Convertible</option>
+                                                        <option value="Minivan / Panelvan">Minivan / Panelvan</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="input-group">
+                                                        <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                            <span class="fas fa-map-marker-alt"></span> <span class="ms-1">Alış Lokasyonu</span>
+                                                        </div>
+                                                        <input type="text" id="pickUpCity" class="form-control" placeholder="Şehir adı yazın (örn: İstanbul)" autocomplete="off">
+                                                        <select name="pickUpAirportId" id="pickUpAirportSelect" class="form-select" aria-label="Havalimanı Seçiniz" style="display: none;">
+                                                            <option value="">Önce şehir seçiniz</option>
+                                                        </select>
+                                                    </div>
+                                                    <div id="pickUpAirportList" class="mt-2" style="display: none;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <a href="#" class="text-start text-white d-block mb-2">Farklı teslim lokasyonu mu istiyorsunuz?</a>
+                                                    <div class="input-group">
+                                                        <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                            <span class="fas fa-map-marker-alt"></span><span class="ms-1">Teslim Lokasyonu</span>
+                                                        </div>
+                                                        <input type="text" id="dropOffCity" class="form-control" placeholder="Şehir adı yazın (örn: İstanbul)" autocomplete="off">
+                                                        <select name="dropOffAirportId" id="dropOffAirportSelect" class="form-select" aria-label="Havalimanı Seçiniz" style="display: none;">
+                                                            <option value="">Önce şehir seçiniz</option>
+                                                        </select>
+                                                    </div>
+                                                    <div id="dropOffAirportList" class="mt-2" style="display: none;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="input-group">
+                                                        <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                            <span class="fas fa-calendar-alt"></span><span class="ms-1">Alış Tarihi</span>
+                                                        </div>
+                                                        <input name="pickUpDate" class="form-control" type="date">
+                                                        <select class="form-select ms-3" aria-label="Saat Seçimi">
+                                                            @for (int i = 0; i < 24; i++)
+                                                                {
+                                                                    <option value="@i">@i.ToString("D2"):00</option>
+                                                                }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="input-group">
+                                                        <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                            <span class="fas fa-calendar-alt"></span><span class="ms-1">Teslim Tarihi</span>
+                                                        </div>
+                                                        <input name="dropOffDate" class="form-control" type="date">
+                                                        <select class="form-select ms-3" aria-label="Saat Seçimi">
+                                                            @for (int i = 0; i < 24; i++)
+                                                                {
+                                                                    <option value="@i">@i.ToString("D2"):00</option>
+                                                                }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <button type="submit" class="btn btn-light w-100 py-2">Araçları Listele</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 d-none d-lg-flex fadeInRight animated" data-animation="fadeInRight" data-delay="1s" style="animation-delay: 1s;">
+                                    <div class="text-start">
+                                        <h1 class="display-5 text-white">@Model[i].SliderSubTitle</h1>
+                                        <p>Sürüş Keyfini Bizimle Keşfet</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/js/slider-search.js"></script>

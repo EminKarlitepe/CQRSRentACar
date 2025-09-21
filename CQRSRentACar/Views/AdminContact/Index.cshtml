@@ -1,0 +1,93 @@
+@{
+    ViewData["Title"] = "İletişim Mesajları";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model List<CQRSRentACar.Entities.ContactMessage>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-envelope mr-2"></i>İletişim Mesajları
+                </h3>
+                <div class="card-tools">
+                    <span class="badge badge-primary">@Model.Count Mesaj</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Ad Soyad</th>
+                                <th>E-posta</th>
+                                <th>Konu</th>
+                                <th>Mesaj</th>
+                                <th>Tarih</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var message in Model)
+                            {
+                                <tr class="@(message.IsRead ? "" : "table-warning")">
+                                    <td>@message.ContactMessageId</td>
+                                    <td>@message.Name</td>
+                                    <td>@message.Email</td>
+                                    <td>@message.Subject</td>
+                                    <td>@(message.Message.Length > 50 ? message.Message.Substring(0, 50) + "..." : message.Message)</td>
+                                    <td>@message.SentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>
+                                        @if (message.IsRead)
+                                        {
+                                            <span class="badge badge-success">Okundu</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-warning">Okunmadı</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Details", "AdminContact", new { id = message.ContactMessageId })" 
+                                           class="btn btn-primary btn-sm">
+                                            <i class="fas fa-eye"></i> Detay
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm ml-1" 
+                                                onclick="deleteMessage(@message.ContactMessageId)">
+                                            <i class="fas fa-trash"></i> Sil
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteMessage(id) {
+            if (confirm('Bu mesajı silmek istediğinizden emin misiniz?')) {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '@Url.Action("Delete", "AdminContact")';
+                
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'id';
+                input.value = id;
+                
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+}

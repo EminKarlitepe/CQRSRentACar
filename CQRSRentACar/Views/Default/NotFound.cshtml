@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "404 - Sayfa Bulunamadı";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid bg-light py-5">
+    <div class="container py-5 text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="error-content">
+                    <i class="fas fa-exclamation-triangle display-1 text-primary mb-4"></i>
+                    <h1 class="display-1 fw-bold text-primary">404</h1>
+                    <h2 class="mb-4">Sayfa Bulunamadı</h2>
+                    <p class="mb-4 fs-5">
+                        Üzgünüz, aradığınız sayfa mevcut değil. Sayfa kaldırılmış, taşınmış veya hiç oluşturulmamış olabilir.
+                    </p>
+                    <p class="mb-5 text-muted">
+                        Ana sayfaya dönebilir veya aşağıdaki linkleri kullanabilirsiniz.
+                    </p>
+                    
+                    <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
+                        <a href="~/" class="btn btn-primary rounded-pill py-3 px-5">
+                            <i class="fas fa-home me-2"></i>Ana Sayfaya Dön
+                        </a>
+                        <a href="~/Cars" class="btn btn-outline-primary rounded-pill py-3 px-5">
+                            <i class="fas fa-car me-2"></i>Araçlarımız
+                        </a>
+                        <a href="#contact" class="btn btn-outline-primary rounded-pill py-3 px-5">
+                            <i class="fas fa-envelope me-2"></i>İletişim
+                        </a>
+                    </div>
+
+                    <div class="mt-5">
+                        <h5 class="mb-3">Popüler Sayfalar</h5>
+                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                            <a href="#features" class="btn btn-sm btn-outline-secondary">Özelliklerimiz</a>
+                            <a href="#about" class="btn btn-sm btn-outline-secondary">Hakkımızda</a>
+                            <a href="#services" class="btn btn-sm btn-outline-secondary">Hizmetler</a>
+                            <a href="#testimonials" class="btn btn-sm btn-outline-secondary">Müşteri Yorumları</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .error-content {
+        animation: fadeInUp 0.8s ease-out;
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .display-1 {
+        font-size: 8rem;
+        font-weight: 900;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    @@media (max-width: 768px) {
+        .display-1 {
+            font-size: 5rem;
+        }
+        
+        .btn {
+            margin-bottom: 10px;
+        }
+    }
+</style>
+

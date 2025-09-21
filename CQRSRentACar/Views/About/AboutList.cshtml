@@ -1,0 +1,54 @@
+@model IEnumerable<CQRSRentACar.CQRSPattern.Results.AboutResults.GetAboutQueryResult>
+@{
+    ViewData["Title"] = "Hakkımızda Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Hakkımızda Yönetimi</h3>
+                <div class="card-tools">
+                    <a asp-action="CreateAbout" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Yeni Ekle
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Açıklama 1</th>
+                            <th>Açıklama 2</th>
+                            <th>Vizyon</th>
+                            <th>Misyon</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.AboutId</td>
+                                <td>@(item.Description1?.Length > 50 ? item.Description1.Substring(0, 50) + "..." : item.Description1)</td>
+                                <td>@(item.Description2?.Length > 50 ? item.Description2.Substring(0, 50) + "..." : item.Description2)</td>
+                                <td>@(item.VisionDescription?.Length > 30 ? item.VisionDescription.Substring(0, 30) + "..." : item.VisionDescription)</td>
+                                <td>@(item.MisionDescription?.Length > 30 ? item.MisionDescription.Substring(0, 30) + "..." : item.MisionDescription)</td>
+                                <td>
+                                    <a asp-action="UpdateAbout" asp-route-id="@item.AboutId" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </a>
+                                    <a asp-action="DeleteAbout" asp-route-id="@item.AboutId" class="btn btn-danger btn-sm" onclick="return confirm('Bu kaydı silmek istediğinizden emin misiniz?')">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

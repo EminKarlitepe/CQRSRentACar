@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\AdminLTE-3.1.0\.github\codeql\codeql-config.yml" />
+    <None Include="wwwroot\AdminLTE-3.1.0\.github\CONTRIBUTING.md" />
+    <None Include="wwwroot\AdminLTE-3.1.0\.github\dependabot.yml" />
+    <None Include="wwwroot\AdminLTE-3.1.0\.github\ISSUE_TEMPLATE\bug-report-for-adminlte-v3.1-x.md" />
+    <None Include="wwwroot\AdminLTE-3.1.0\.github\ISSUE_TEMPLATE\feature-request-for-adminlte-v4-x.md" />
+    <None Include="wwwroot\AdminLTE-3.1.0\.github\workflows\ci.yml" />
+    <None Include="wwwroot\AdminLTE-3.1.0\.github\workflows\codeql.yml" />
+    <None Include="wwwroot\AdminLTE-3.1.0\.github\workflows\docs.yml" />
+    <None Include="wwwroot\AdminLTE-3.1.0\.github\workflows\lint.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
+</Project>

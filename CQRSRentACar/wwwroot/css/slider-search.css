@@ -1,0 +1,98 @@
+/* Slider Search Form Styles */
+.slider-search .airport-item {
+    background-color: #f8f9fa !important;
+    border: 1px solid #dee2e6 !important;
+    color: #333 !important;
+    transition: all 0.2s ease;
+}
+
+.slider-search .airport-item:hover {
+    background-color: #e9ecef !important;
+    border-color: #007bff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.slider-search .airport-item .fw-bold {
+    color: #212529 !important;
+}
+
+.slider-search .airport-item .text-secondary {
+    color: #6c757d !important;
+}
+
+.slider-search .cursor-pointer {
+    cursor: pointer;
+}
+
+/* Form validation styles */
+.slider-search .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.slider-search .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Button hover effects */
+.slider-search .btn-light:hover {
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Distance info styles */
+.slider-search .alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.slider-search .badge {
+    font-size: 0.75em;
+}
+
+/* Animation styles */
+.slider-search .fadeInLeft {
+    animation: fadeInLeft 1s ease-out;
+}
+
+.slider-search .fadeInRight {
+    animation: fadeInRight 1s ease-out;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .slider-search .airport-item {
+        padding: 0.75rem !important;
+    }
+    
+    .slider-search .btn-light {
+        padding: 0.75rem 1rem;
+    }
+}

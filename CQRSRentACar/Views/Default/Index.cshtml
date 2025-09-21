@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync("_SliderComponentPartial")
+
+<div id="features">
+@await Component.InvokeAsync("_FeaturesComponentPartial")
+</div>
+
+<div id="about">
+@await Component.InvokeAsync("_AboutComponentPartial")
+</div>
+
+@await Component.InvokeAsync("_StatisticsComponentPartial")
+
+<div id="popular-cars">
+@await Component.InvokeAsync("_PopularCarsComponentPartial")
+</div>
+
+<div id="services">
+@await Component.InvokeAsync("_ServiceComponentPartial")
+</div>
+
+<div id="team">
+@await Component.InvokeAsync("_EmployeeComponentPartial")
+</div>
+
+<div id="testimonials">
+@await Component.InvokeAsync("_TestimonialComponentPartial")
+</div>
+
+<div id="contact">
+@await Component.InvokeAsync("_ContactComponentPartial")
+</div>

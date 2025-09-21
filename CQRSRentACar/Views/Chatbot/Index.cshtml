@@ -1,0 +1,77 @@
+@{
+    ViewData["Title"] = "Chatbot - CQRS Rent A Car";
+}
+
+<link href="~/css/chatbot.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-robot"></i> 
+                        Akıllı Asistan
+                    </h3>
+                    <div class="card-tools">
+                        <span class="badge badge-success" id="status-badge">Çevrimiçi</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="chat-container" class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message bot-message">
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <strong>CQRS Rent A Car Asistanı</strong>
+                                        <small class="text-muted">şimdi</small>
+                                    </div>
+                                    <div class="message-text">
+                                        Merhaba! Size nasıl yardımcı olabilirim? 
+                                        <br>
+                                        • Araç önerisi için: "Ekonomik araç önerisi istiyorum"
+                                        <br>
+                                        • Acil destek için: "Rezervasyonumda sorun var"
+                                        <br>
+                                        • Genel bilgi için: "Fiyatlarınız nedir?"
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="input-group">
+                            <input type="text" 
+                                   id="message-input" 
+                                   class="form-control" 
+                                   placeholder="Mesajınızı yazın..." 
+                                   maxlength="500">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" id="send-button" type="button">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-actions mt-2">
+                            <button class="btn btn-sm btn-outline-primary quick-action-btn" data-message="Ekonomik araç önerisi istiyorum">
+                                <i class="fas fa-car"></i> Araç Önerisi
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning quick-action-btn" data-message="Acil yardım istiyorum">
+                                <i class="fas fa-exclamation-triangle"></i> Acil Destek
+                            </button>
+                            <button class="btn btn-sm btn-outline-info quick-action-btn" data-message="Fiyatlarınız nedir?">
+                                <i class="fas fa-tags"></i> Fiyat Bilgisi
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary quick-action-btn" data-message="Rezervasyon nasıl yapılır?">
+                                <i class="fas fa-calendar-plus"></i> Rezervasyon
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/chatbot.js"></script>

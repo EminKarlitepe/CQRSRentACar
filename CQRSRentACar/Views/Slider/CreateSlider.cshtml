@@ -1,0 +1,47 @@
+@model CQRSRentACar.CQRSPattern.Commands.SliderCommands.CreateSliderCommand
+@{
+    ViewData["Title"] = "Yeni Slider Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Yeni Slider Ekle</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateSlider">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group">
+                            <label asp-for="SliderTitle" class="control-label">Başlık</label>
+                            <input asp-for="SliderTitle" class="form-control" />
+                            <span asp-validation-for="SliderTitle" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="SliderSubTitle" class="control-label">Alt Başlık</label>
+                            <input asp-for="SliderSubTitle" class="form-control" />
+                            <span asp-validation-for="SliderSubTitle" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="SliderImageUrl" class="control-label">Resim URL</label>
+                            <input asp-for="SliderImageUrl" class="form-control" />
+                            <span asp-validation-for="SliderImageUrl" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="submit" value="Kaydet" class="btn btn-primary" />
+                            <a asp-action="SliderList" class="btn btn-secondary">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

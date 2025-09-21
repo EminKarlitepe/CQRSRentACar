@@ -1,0 +1,65 @@
+@model CQRSRentACar.CQRSPattern.Commands.TestimonialCommands.CreateTestimonialCommand
+@{
+    ViewData["Title"] = "Yeni Referans Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Yeni Referans Ekle</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateTestimonial">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group">
+                            <label asp-for="TestimonialNameSurname" class="control-label">Ad Soyad</label>
+                            <input asp-for="TestimonialNameSurname" class="form-control" />
+                            <span asp-validation-for="TestimonialNameSurname" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="TestimonialPosition" class="control-label">Pozisyon</label>
+                            <input asp-for="TestimonialPosition" class="form-control" />
+                            <span asp-validation-for="TestimonialPosition" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="TestimonialRating" class="control-label">Puan (1-5)</label>
+                            <select asp-for="TestimonialRating" class="form-control">
+                                <option value="1">1 Yıldız</option>
+                                <option value="2">2 Yıldız</option>
+                                <option value="3">3 Yıldız</option>
+                                <option value="4">4 Yıldız</option>
+                                <option value="5" selected>5 Yıldız</option>
+                            </select>
+                            <span asp-validation-for="TestimonialRating" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="TestimonialComment" class="control-label">Yorum</label>
+                            <textarea asp-for="TestimonialComment" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="TestimonialComment" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="TestimonialImageUrl" class="control-label">Resim URL</label>
+                            <input asp-for="TestimonialImageUrl" class="form-control" placeholder="https://example.com/resim.jpg" />
+                            <span asp-validation-for="TestimonialImageUrl" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="submit" value="Kaydet" class="btn btn-primary" />
+                            <a asp-action="TestimonialList" class="btn btn-secondary">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

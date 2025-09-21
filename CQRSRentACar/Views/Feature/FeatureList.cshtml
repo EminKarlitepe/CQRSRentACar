@@ -1,0 +1,61 @@
+@model IEnumerable<CQRSRentACar.CQRSPattern.Results.FeatureResults.GetFeatureQueryResult>
+@{
+    ViewData["Title"] = "Özellik Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Özellik Yönetimi</h3>
+                    <div class="card-tools">
+                        <a asp-action="CreateFeature" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Yeni Ekle
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>İkon</th>
+                                <th>Başlık</th>
+                                <th>Açıklama</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.FeatureId</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.FeatureIcon))
+                                        {
+                                            <i class="@item.FeatureIcon fa-2x"></i>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">İkon Yok</span>
+                                        }
+                                    </td>
+                                    <td>@item.FeatureTitle</td>
+                                    <td>@(item.FeatureDescription?.Length > 50 ? item.FeatureDescription.Substring(0, 50) + "..." : item.FeatureDescription)</td>
+                                    <td>
+                                        <a asp-action="UpdateFeature" asp-route-id="@item.FeatureId" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Düzenle
+                                        </a>
+                                        <a asp-action="DeleteFeature" asp-route-id="@item.FeatureId" class="btn btn-danger btn-sm" onclick="return confirm('Bu özelliği silmek istediğinizden emin misiniz?')">
+                                            <i class="fas fa-trash"></i> Sil
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+</div>

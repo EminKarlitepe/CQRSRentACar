@@ -1,0 +1,48 @@
+@model CQRSRentACar.CQRSPattern.Commands.FeatureCommands.CreateFeatureCommand
+@{
+    ViewData["Title"] = "Yeni Özellik Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Yeni Özellik Ekle</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateFeature">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group">
+                            <label asp-for="FeatureTitle" class="control-label">Başlık</label>
+                            <input asp-for="FeatureTitle" class="form-control" />
+                            <span asp-validation-for="FeatureTitle" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="FeatureDescription" class="control-label">Açıklama</label>
+                            <textarea asp-for="FeatureDescription" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="FeatureDescription" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="FeatureIcon" class="control-label">İkon (Font Awesome)</label>
+                            <input asp-for="FeatureIcon" class="form-control" placeholder="fa fa-star" />
+                            <small class="form-text text-muted">Örnek: fa fa-star, fa fa-trophy, fa fa-road</small>
+                            <span asp-validation-for="FeatureIcon" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="submit" value="Kaydet" class="btn btn-primary" />
+                            <a asp-action="FeatureList" class="btn btn-secondary">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

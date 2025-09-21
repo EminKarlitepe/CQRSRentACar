@@ -1,0 +1,114 @@
+@{
+    ViewData["Title"] = "Mesaj Detayı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model CQRSRentACar.Entities.ContactMessage
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-envelope-open-text mr-2"></i>Mesaj Detayı
+                </h3>
+                <div class="card-tools">
+                    <a href="@Url.Action("Index", "AdminContact")" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Geri Dön
+                    </a>
+                    <button type="button" class="btn btn-danger btn-sm ml-2" 
+                            onclick="deleteMessage(@Model.ContactMessageId)">
+                        <i class="fas fa-trash"></i> Sil
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label><strong>Ad Soyad:</strong></label>
+                            <p class="form-control-plaintext">@Model.Name</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label><strong>E-posta:</strong></label>
+                            <p class="form-control-plaintext">@Model.Email</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label><strong>Konu:</strong></label>
+                            <p class="form-control-plaintext">@Model.Subject</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label><strong>Gönderim Tarihi:</strong></label>
+                            <p class="form-control-plaintext">@Model.SentDate.ToString("dd.MM.yyyy HH:mm")</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><strong>Mesaj:</strong></label>
+                    <div class="border p-3 bg-light">
+                        @Model.Message
+                    </div>
+                </div>
+                
+                @if (!string.IsNullOrEmpty(Model.AiResponse))
+                {
+                    <div class="form-group">
+                        <label><strong>AI Cevabı:</strong></label>
+                        <div class="border p-3 bg-info text-white">
+                            <i class="fas fa-robot mr-2"></i>@Model.AiResponse
+                        </div>
+                        @if (Model.ResponseDate.HasValue)
+                        {
+                            <small class="text-muted">Cevap Tarihi: @Model.ResponseDate.Value.ToString("dd.MM.yyyy HH:mm")</small>
+                        }
+                    </div>
+                }
+                
+                <div class="form-group">
+                    <label><strong>Durum:</strong></label>
+                    <p>
+                        @if (Model.IsRead)
+                        {
+                            <span class="badge badge-success">Okundu</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-warning">Okunmadı</span>
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteMessage(id) {
+            if (confirm('Bu mesajı silmek istediğinizden emin misiniz?')) {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '@Url.Action("Delete", "AdminContact")';
+                
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'id';
+                input.value = id;
+                
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+}

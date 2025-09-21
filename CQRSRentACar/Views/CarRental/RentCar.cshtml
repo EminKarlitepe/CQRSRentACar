@@ -1,0 +1,191 @@
+@model CQRSRentACar.CQRSPattern.Commands.CarRentalCommands.CreateCarRentalCommand
+@{
+    ViewData["Title"] = "Araç Kiralama";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"]</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-car"></i> Araç Kiralama
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <img src="@ViewBag.Car.CarImageUrl" alt="@ViewBag.Car.CarName" class="img-fluid rounded">
+                        </div>
+                        <div class="col-md-8">
+                            <h3>@ViewBag.Car.CarName</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Araç Tipi:</strong> @ViewBag.Car.CarType</p>
+                                    <p><strong>Vites:</strong> @ViewBag.Car.Transmission</p>
+                                    <p><strong>Yakıt:</strong> @ViewBag.Car.FuelType</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Koltuk:</strong> @ViewBag.Car.Seat</p>
+                                    <p><strong>Model:</strong> @ViewBag.Car.ModelYear</p>
+                                    <p><strong>Kilometre:</strong> @ViewBag.Car.Kilometer.ToString("N0") km</p>
+                                </div>
+                            </div>
+                            <div class="alert alert-info">
+                                <h5 class="mb-0">₺@ViewBag.Car.Price.ToString("N0") / gün</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="RentCar" method="post" id="rentalForm">
+                        <input asp-for="CarId" type="hidden" value="@ViewBag.Car.CarId">
+                        <input asp-for="PickUpAirportId" type="hidden" value="@ViewBag.PickUpAirportId">
+                        <input asp-for="DropOffAirportId" type="hidden" value="@ViewBag.DropOffAirportId">
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-map-marker-alt text-primary"></i> Alış Lokasyonu
+                                </label>
+                                <input type="text" class="form-control" value="@(ViewBag.PickUpLocation ?? "")" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-map-marker-alt text-primary"></i> Teslim Lokasyonu
+                                </label>
+                                <input type="text" class="form-control" value="@(ViewBag.DropOffLocation ?? "")" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-flag text-primary"></i> Yakıt Fiyatı Ülkesi
+                                    </label>
+                                    <select id="countrySelect" class="form-control">
+                                        <option value="">Ülke Seçiniz</option>
+                                        @if (ViewBag.FuelPrices?.Result != null)
+                                        {
+                                            @foreach (var country in ViewBag.FuelPrices.Result)
+                                            {
+                                                @if (ViewBag.SelectedCountry == country.Country)
+                                                {
+                                                    <option value="@country.Country" selected>
+                                                        @country.Country (@country.Currency)
+                                                    </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@country.Country">
+                                                        @country.Country (@country.Currency)
+                                                    </option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="PickUpDate" class="form-label">
+                                        <i class="fas fa-calendar-alt text-primary"></i> Alış Tarihi
+                                    </label>
+                                    <input asp-for="PickUpDate" type="date" class="form-control" 
+                                           value="@(ViewBag.PickUpDate?.ToString("yyyy-MM-dd") ?? "")" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="DropOffDate" class="form-label">
+                                        <i class="fas fa-calendar-alt text-primary"></i> Teslim Tarihi
+                                    </label>
+                                    <input asp-for="DropOffDate" type="date" class="form-control" 
+                                           value="@(ViewBag.DropOffDate?.ToString("yyyy-MM-dd") ?? "")" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (ViewBag.DistanceKm > 0)
+                        {
+                            <div class="alert alert-warning mb-3">
+                                <h6><i class="fas fa-route"></i> Mesafe Bilgisi</h6>
+                                <p><strong>@ViewBag.PickUpLocation</strong> → <strong>@ViewBag.DropOffLocation</strong></p>
+                                <p><span class="badge bg-primary">@ViewBag.DistanceKm km</span></p>
+                                <p><i class="fas fa-coins"></i> Mesafe ücreti: ₺@ViewBag.DistanceCost</p>
+                                @if (ViewBag.FuelPricePerKm > 0)
+                                {
+                                    <p><small class="text-muted">Kilometre başına yakıt ücreti: ₺@ViewBag.FuelPricePerKm</small></p>
+                                }
+                            </div>
+                        }
+
+                        <div class="alert alert-info">
+                            <h5><i class="fas fa-calculator"></i> Fiyat Hesaplama</h5>
+                            <div id="priceCalculation">
+                                <p>Kiralama süresi: <span id="rentalDays">-</span> gün</p>
+                                <p>Günlük fiyat: ₺<span id="dailyPrice">@ViewBag.Car.Price.ToString("N0")</span></p>
+                                @if (ViewBag.DistanceCost > 0)
+                                {
+                                    <p>Mesafe ücreti: ₺<span id="distanceCostAmount">@ViewBag.DistanceCost</span></p>
+                                    <p><small class="text-muted">@ViewBag.Car.FuelType yakıt fiyatı hesaplanmıştır</small></p>
+                                }
+                                <hr>
+                                <h4>Toplam: ₺<span id="totalPrice">-</span></h4>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("SearchCars", "Car", new { 
+                                carType = ViewBag.SearchParams?.CarType,
+                                pickUpAirportId = ViewBag.PickUpAirportId,
+                                dropOffAirportId = ViewBag.DropOffAirportId,
+                                pickUpDate = ViewBag.PickUpDate,
+                                dropOffDate = ViewBag.DropOffDate
+                            })" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-arrow-left"></i> Geri Dön
+                            </a>
+                            <button id="submitButton" type="button" class="btn btn-primary btn-lg">
+                                <i class="fas fa-check"></i> Kirala
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="successModal" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <div class="mb-4">
+                    <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                </div>
+                <h3 class="text-success mb-3">Kiralama Başarılı!</h3>
+                <p class="mb-4">Araç kiralama işleminiz başarıyla tamamlandı.</p>
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Yönlendiriliyor...</span>
+                </div>
+                <p class="mt-2 text-muted">Ana sayfaya yönlendiriliyorsunuz...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/rental.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

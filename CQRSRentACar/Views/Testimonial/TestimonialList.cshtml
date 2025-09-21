@@ -1,0 +1,79 @@
+@model IEnumerable<CQRSRentACar.CQRSPattern.Results.TestimonialResults.GetTestimonialQueryResult>
+@{
+    ViewData["Title"] = "Referans Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Referans Yönetimi</h3>
+                    <div class="card-tools">
+                        <a asp-action="CreateTestimonial" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Yeni Ekle
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Resim</th>
+                                <th>Ad Soyad</th>
+                                <th>Pozisyon</th>
+                                <th>Puan</th>
+                                <th>Yorum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.TestimonialId</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.TestimonialImageUrl))
+                                        {
+                                            <img src="@item.TestimonialImageUrl" alt="@item.TestimonialNameSurname" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;" />
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-primary d-flex align-items-center justify-content-center text-white fw-bold" style="width: 50px; height: 50px; border-radius: 50%;">
+                                                @item.TestimonialNameSurname.Substring(0, 1).ToUpper()
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>@item.TestimonialNameSurname</td>
+                                    <td>@item.TestimonialPosition</td>
+                                    <td>
+                                        @if (int.TryParse(item.TestimonialRating, out int rating))
+                                        {
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fas fa-star @(i <= rating ? "text-warning" : "text-muted")"></i>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">@item.TestimonialRating</span>
+                                        }
+                                    </td>
+                                    <td>@(item.TestimonialComment?.Length > 30 ? item.TestimonialComment.Substring(0, 30) + "..." : item.TestimonialComment)</td>
+                                    <td>
+                                        <a asp-action="UpdateTestimonial" asp-route-id="@item.TestimonialId" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Düzenle
+                                        </a>
+                                        <a asp-action="DeleteTestimonial" asp-route-id="@item.TestimonialId" class="btn btn-danger btn-sm" onclick="return confirm('Bu referansı silmek istediğinizden emin misiniz?')">
+                                            <i class="fas fa-trash"></i> Sil
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+</div>

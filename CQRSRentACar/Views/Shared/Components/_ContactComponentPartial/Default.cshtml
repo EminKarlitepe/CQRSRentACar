@@ -1,0 +1,78 @@
+
+<link rel="stylesheet" href="~/css/contact-form.css" />
+
+<div class="container-fluid bg-primary text-light py-5 contact-form">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <h2 class="text-white mb-4">Bizimle İletişime Geçin</h2>
+                <p class="text-white-50 mb-4">
+                    Araç kiralama konusunda sorularınız mı var? Size yardımcı olmaktan mutluluk duyarız. 
+                    Mesajınızı gönderin, en kısa sürede size dönüş yapalım.
+                </p>
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-phone-alt text-white me-3"></i>
+                    <span class="text-white">+90 212 555 0123</span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-envelope text-white me-3"></i>
+                    <span class="text-white">info@cqrsrentacar.com</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-map-marker-alt text-white me-3"></i>
+                    <span class="text-white">İstanbul, Türkiye</span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <form id="contactForm" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="name" name="Name" placeholder="Adınız" required>
+                                <label for="name">Adınız</label>
+                                <div class="invalid-feedback">
+                                    Lütfen adınızı girin.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="email" name="Email" placeholder="E-posta" required>
+                                <label for="email">E-posta</label>
+                                <div class="invalid-feedback">
+                                    Lütfen geçerli bir e-posta adresi girin.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="subject" name="Subject" placeholder="Konu" required>
+                                <label for="subject">Konu</label>
+                                <div class="invalid-feedback">
+                                    Lütfen konu girin.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="message" name="Message" placeholder="Mesajınız" style="height: 100px" required></textarea>
+                                <label for="message">Mesajınız</label>
+                                <div class="invalid-feedback">
+                                    Lütfen mesajınızı girin.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-light btn-lg px-5" type="submit" id="submitBtn">
+                                <span id="submitText">Mesaj Gönder</span>
+                                <span id="loadingSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/contact-form.js"></script>
